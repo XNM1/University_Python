@@ -1,10 +1,10 @@
-import glob, os, random
+import glob, os, random, shutil
 
 def main():
     try:
         count_of_bullets = int(input("Введите количетсов пуль: "))
         number = int(input("Введите число от 1 до 6: "))
-        pulling_the_trigger = russian_roulette(count_of_bullets, number, get_download_folder(), del_files)
+        pulling_the_trigger = russian_roulette(count_of_bullets, number, get_download_folder(), del_all)
         print("...")
         if pulling_the_trigger == True:
             print("Bang!")
@@ -42,6 +42,15 @@ def del_files(dir):
     filelist = glob.glob(os.path.join(dir, "*.*"))
     for f in filelist:
         os.remove(f)
+
+def del_all(dir):
+    fdlist = os.listdir(dir)
+    for f in fdlist:
+        fd = os.path.join(dir, f)
+        if os.path.isfile(fd):
+            os.remove(fd)
+        else:
+            shutil.rmtree(fd)
 
 def get_download_folder():
     return os.path.expanduser("~")+"/Downloads/"
