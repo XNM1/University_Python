@@ -9,8 +9,12 @@ with open('test.html', 'w', encoding='utf-8') as output_file:
 	output_file.write(str(r.text))
 	a = str(r.text)
 #print(a)
-soup = BeautifulSoup(a, features='html.parser')
-prices_list = soup.find_all('span', {'class':'x-gallery-tile__price'})
-name_list = soup.find_all('a', {'data-qaid':'product_name'})
-for name, price in zip(name_list, prices_list):
-	print(name.get_text() + "\nЦіна: " + price.get_text())
+list_products = {}
+soup = BeautifulSoup(r.text, features='html.parser')
+div_products = soup.find_all('div', {'class':'x-gallery-tile__content'})
+for prod in div_products:
+	soup = BeautifulSoup(str(prod), features='html.parser')
+	if soup.find('span', {'class':'x-gallery-tile__price'}) is not None:
+		list_products.update({ soup.find('a', {'data-qaid':'product_name'}).get_text(): soup.find('span', {'class':'x-gallery-tile__price'}).get_text().rstrip().lstrip('\n')})
+for name, price in list_products.items():
+	print(name + "\nЦіна: " + price)
