@@ -1,4 +1,4 @@
-import requests, sys, re, threading
+import requests, sys, re, threading, time
 from bs4 import BeautifulSoup
 
 
@@ -9,9 +9,10 @@ class KarnavalParse():
             self.avg_price = int(sys.argv[2])
             self.list_urls = []
             self.list_near_product = {}
+            self.list_products = {}
+            self.user_agent = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36' }
             for i in range(int(sys.argv[1])):
                 self.list_urls.append(f'https://prom.ua/ua/Karnavalnye-kostyumy-iuzhskie;{i + 1}')
-            self.user_agent = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36' }
         except ValueError:
             print("Incorrect arguments")
             sys.exit()
@@ -23,15 +24,13 @@ class KarnavalParse():
             sys.exit()
 
     def get_all_data(self):
-        self.list_products = {}
         for url in self.list_urls:
-            r = requests.get(url, headers = self.user_agent)
-            t = threading.Thread(target=self.__get_data, args=(r, ))
+            t = threading.Thread(target=self.__get_data, args=(url, ))
             t.start()
             t.join()
 
-    def __get_data(self, req):
-        print(".", end = '')
+    def __get_data(self, url):
+        req = requests.get(url, headers = self.user_agent)
         soup = BeautifulSoup(req.text, features='html.parser')
         div_products = soup.find_all('div', {'class':'x-gallery-tile__content'})
         for prod in div_products:
