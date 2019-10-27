@@ -24,9 +24,12 @@ class KarnavalParse():
             sys.exit()
 
     def get_all_data(self):
+        threads = []
         for url in self.list_urls:
             t = threading.Thread(target=self.__get_data, args=(url, ))
             t.start()
+            threads.append(t)
+        for t in threads:
             t.join()
 
     def __get_data(self, url):
