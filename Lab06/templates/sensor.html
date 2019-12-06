@@ -2,9 +2,14 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Hello Django</title>
+    <title>{{sensor.name}}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 </head>
 <body>
-    <h2>{{ sensor }}</h2>
+    <h2>{{ sensor.name }}</h2>
+    <p>Model: {{ sensor.model }}</p>
+    <p>Category: {{ category.name }}</p>
+    <p>Created: {{ sensor.create_date }}</p>
+    <p>Coords: lon({{ sensor.lon }}), lat({{ sensor.lat }}) </p>
 </body>
 </html>

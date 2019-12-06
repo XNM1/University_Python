@@ -2,9 +2,13 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Hello Django</title>
+    <title>Sensors</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 </head>
 <body>
-    <h2>{{ sensors }}</h2>
+    <h2>Sensors</h2><br/>
+    {% for sens in sensors %}
+        <a href='/sensors/{{sens.id}}'>{{ sens.name }}</a><br/>
+    {% endfor %}
 </body>
 </html>
