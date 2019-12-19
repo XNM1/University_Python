@@ -20,8 +20,10 @@
                         <h2 class="text-success">Snapshot successfully created</h2>
                     {% elif data == 'xml' %}
                         <h2 class="text-success">Data successfully exported into XML</h2>
+                        <a class="btn btn-success" href="/data/xml/" role="button">Get</a>
                     {% elif data == 'docx' %}
                         <h2 class="text-success">Data successfully exported into DOCX</h2>
+                        <a class="btn btn-success" href="/data/docx/" role="button">Download</a>
                     {% endif %}
                 </div>
             </div>

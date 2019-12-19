@@ -27,6 +27,8 @@ urlpatterns = [
     path('exports/', views.exports),
     path('exports/xml/', views.export_xml),
     path('exports/docx/', views.export_docx),
+    path('data/xml/', views.get_xml),
+    path('data/docx/', views.get_docx),
     path('admin/', admin.site.urls),
     re_path(r'^sensors/(?P<id>\d+)/', views.sensor),
 ]

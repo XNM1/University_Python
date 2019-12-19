@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import FileResponse
 from .models import Sensor, SensorCategory, AtmoSnapshot
 from django.views.generic import CreateView
 from dicttoxml import dicttoxml
@@ -7,6 +7,7 @@ from xml.dom.minidom import parseString
 from django.forms.models import model_to_dict
 from docx import Document
 from docx.shared import Cm
+import datetime
 
 
 def index(request):
@@ -42,6 +43,18 @@ def export_docx(request):
 
 def success(request, data):
     return render(request, "success.html", context={"data": data})
+
+def get_xml(request):
+    try:
+        return render(request, 'formated_data\\data.xml', content_type='text/xml')
+    except Exception:
+        return render(request, "fail.html", context={"data": 'xml_get'})
+
+def get_docx(request):
+    try:
+        return FileResponse(open('templates\\formated_data\\data.docx', 'rb'))
+    except Exception:
+        return render(request, "fail.html", context={"data": 'docx_get'})
 
 class SensorCategoryCreateView(CreateView):
     template_name = 'creations/sensor_category_create.html'
@@ -81,14 +94,14 @@ class Exporter(object):
     def export_to_xml(self, data):
         xml = dicttoxml(data, custom_root='Data', attr_type=False)
         dom = parseString(xml)
-        file = open('data.xml', 'w')
+        file = open('templates\\formated_data\\data.xml', 'w')
         file.write(dom.toprettyxml())
         file.close()
 
     def export_to_docx(self, data):
         document = Document()
         document.add_heading('Data of AtmoStation', 0)
-        document.add_paragraph(str(document.core_properties.created))
+        document.add_paragraph(str(datetime.datetime.now()))
         for k, v in data.items():
             document.add_heading(k, level=1)
             for v1 in v:
@@ -96,7 +109,7 @@ class Exporter(object):
                 for v2 in v1:
                     document.add_paragraph(str(v2) + ": " + str(v1[v2]), style='List Bullet').paragraph_format.left_indent = Cm(1.5)
 
-        document.save('data.docx')
+        document.save('templates\\formated_data\\data.docx')
 
 class ModelData(object):
     def __init__(self):
